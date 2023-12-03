@@ -3,6 +3,9 @@ package airport;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
+import jakarta.persistence.Query;
+
+import java.util.List;
 
 public class Program {
     public static void main(String[] args) {
@@ -61,17 +64,33 @@ public class Program {
         trip1.addTicket(ticket2);
         trip1.addTicket(ticket3);
 
+        ticket1.addTrip(trip1);
+        ticket2.addTrip(trip1);
+        ticket3.addTrip(trip1);
+
         trip2.addTicket(ticket2);
         trip2.addTicket(ticket3);
         trip2.addTicket(ticket4);
+
+        ticket2.addTrip(trip2);
+        ticket3.addTrip(trip2);
+        ticket4.addTrip(trip2);
 
         trip3.addTicket(ticket3);
         trip3.addTicket(ticket4);
         trip3.addTicket(ticket1);
 
+        ticket3.addTrip(trip3);
+        ticket4.addTrip(trip3);
+        ticket1.addTrip(trip3);
+
         trip4.addTicket(ticket4);
         trip4.addTicket(ticket1);
         trip4.addTicket(ticket2);
+
+        ticket4.addTrip(trip4);
+        ticket1.addTrip(trip4);
+        ticket2.addTrip(trip4);
 
         entityManager.persist(john);
         entityManager.persist(eve);
@@ -85,6 +104,23 @@ public class Program {
 //        entityManager.persist(trip4);
 
         entityManager.getTransaction().commit();
+
+        // FROM - pobiera wszystkie zapisane obiekty do pamięci
+        Query query = entityManager.createQuery("FROM Passenger");
+        List<Passenger> result = query.getResultList();
+
+        System.out.println("*********************");
+        System.out.println("FROM");
+        for (Passenger p : result) {
+            System.out.println(p);
+        }
+        System.out.println("*********************");
+
+        /*entityManager.getTransaction().begin();
+
+        entityManager.remove(entityManager.find(Passenger.class, 1));
+
+        entityManager.getTransaction().commit();*/
 
         entityManagerFactory.close();
     }
