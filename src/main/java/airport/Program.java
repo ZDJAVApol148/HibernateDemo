@@ -116,11 +116,83 @@ public class Program {
         }
         System.out.println("*********************");
 
+        query = entityManager.createQuery("SELECT p.name FROM Passenger p");
+        List<String> result2 = query.getResultList();
+
+        System.out.println("*********************");
+        System.out.println("SELECT FROM");
+        for (String p : result2) {
+            System.out.println(p);
+        }
+        System.out.println("*********************");
+
+        query = entityManager.createQuery("FROM Passenger p ORDER BY p.id DESC");
+        result = query.getResultList();
+
+        System.out.println("*********************");
+        System.out.println("ORDER BY");
+        for (Passenger p : result) {
+            System.out.println(p);
+        }
+        System.out.println("*********************");
+
+        query = entityManager.createQuery("FROM Passenger p WHERE p.id = :passenger_id");
+        query.setParameter("passenger_id", 2);
+        result = query.getResultList();
+
+        System.out.println("*********************");
+        System.out.println("WHERE + parameter");
+        for (Passenger p : result) {
+            System.out.println(p);
+        }
+        System.out.println("*********************");
+
+        entityManager.getTransaction().begin();
+
+        query = entityManager.createQuery("UPDATE Passenger SET name = :name WHERE id = :passenger_id");
+        query.setParameter("passenger_id", 2);
+        query.setParameter("name", "Dorothy Wizard");
+        int count = query.executeUpdate();
+
+        entityManager.getTransaction().commit();
+
+        // entityManager.refresh(entityManager.find(Passenger.class, 2));
+
+        query = entityManager.createQuery("FROM Passenger");
+        result = query.getResultList();
+
+        System.out.println("*********************");
+        System.out.println(count);
+        System.out.println("After UPDATE");
+        for (Passenger p : result) {
+            System.out.println(p);
+        }
+        System.out.println("*********************");
+
         /*entityManager.getTransaction().begin();
 
         entityManager.remove(entityManager.find(Passenger.class, 1));
 
         entityManager.getTransaction().commit();*/
+
+        entityManager.close();
+
+        entityManager = entityManagerFactory.createEntityManager();
+
+        query = entityManager.createQuery("FROM Passenger");
+        result = query.getResultList();
+
+        System.out.println("*********************");
+        System.out.println(count);
+        System.out.println("After UPDATE");
+        for (Passenger p : result) {
+            System.out.println(p);
+        }
+        System.out.println("*********************");
+
+        entityManager.find(Passenger.class, 2);
+
+        entityManager.close();
 
         entityManagerFactory.close();
     }
