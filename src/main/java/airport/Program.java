@@ -190,7 +190,12 @@ public class Program {
         }
         System.out.println("*********************");
 
-        entityManager.find(Passenger.class, 2);
+        System.out.println("*********************");
+        System.out.println("Find");
+        Passenger eveFromDb = entityManager.find(Passenger.class, 2);
+        System.out.println(eveFromDb);
+        // entityManager.createQuery("FROM Passenger p WHERE p.id = 2")
+        System.out.println("*********************");
 
         entityManager.close();
 
